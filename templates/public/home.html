@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - UniRaros{% endblock %}
+
+{% block content %}
+<div class="text-center my-5">
+    <h1 class="display-4">Bem-vindo ao UniRaros</h1>
+    <p class="lead">Sua plataforma informativa e interativa sobre doenças raras.</p>
+</div>
+
+<h2>Eventos Recentes</h2>
+<div class="row">
+    {% for evento in eventos %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ evento.nome }}</h5>
+                <p class="card-text">{{ evento.descricao|truncatechars:80 }}</p>
+                <p class="card-text"><small>Início: {{ evento.data_inicio }}</small></p>
+                <a href="#" class="btn btn-primary">Ver mais</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Nenhum evento disponível.</p>
+    {% endfor %}
+</div>
+
+<h2 class="mt-5">Relatos Recentes</h2>
+<div class="row">
+    {% for relato in relatos %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ relato.titulo }}</h5>
+                <p class="card-text">{{ relato.resumo|truncatechars:80 }}</p>
+                <a href="#" class="btn btn-success">Ver mais</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Nenhum relato disponível.</p>
+    {% endfor %}
+</div>
+
+<h2 class="mt-5">Conteúdos Recentes</h2>
+<div class="row">
+    {% for conteudo in conteudos %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ conteudo.titulo }}</h5>
+                <p class="card-text">{{ conteudo.descricao|truncatechars:80 }}</p>
+                <a href="#" class="btn btn-warning">Ver mais</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Nenhum conteúdo disponível.</p>
+    {% endfor %}
+</div>
+{% endblock %}
