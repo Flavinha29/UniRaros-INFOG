@@ -5,12 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}UniRaros{% endblock %}</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Estilos personalizados -->
+    <style>
+        :root {
+            --roxo: #5B2C6F;
+            --verde: #28A745;
+            --branco: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--branco);
+            color: #333;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--roxo);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            color: var(--branco) !important;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--verde) !important;
+        }
+
+        /* Botões */
+        .btn-primary {
+            background-color: var(--roxo);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #45255A;
+        }
+
+        .btn-success {
+            background-color: var(--verde);
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #208A3C;
+        }
+
+        .btn-warning {
+            background-color: #B7E4C7;
+            color: #222;
+            border: none;
+        }
+
+        .btn-warning:hover {
+            background-color: #95D5B2;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .card-title {
+            color: var(--roxo);
+            font-weight: 600;
+        }
+
+        footer {
+            background-color: var(--roxo);
+            color: var(--branco);
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        footer a {
+            color: var(--verde);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
+
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">UniRaros</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -20,30 +119,30 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'sobre' %}">Sobre</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'relatos-list' %}">Relatos</a></li>
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sair</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Cadastrar</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'cadastro:signup' %}">Cadastrar</a></li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Conteúdo principal -->
-    <main class="container mt-4">
-        {% block content %}
-        {% endblock %}
+    <!-- Conteúdo -->
+    <main class="container my-5">
+        {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-light text-center text-muted py-3 mt-5">
-        &copy; 2025 UniRaros - Todos os direitos reservados
+    <footer class="text-center">
+        &copy; 2025 UniRaros — Todos os direitos reservados.
+        <br>
+        <small>Desenvolvido com propósito e empatia.</small>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

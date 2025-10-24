@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ relato.titulo }} - UniRaros{% endblock %}
+
+{% block content %}
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <h2 class="card-title">{{ relato.titulo }}</h2>
+        <p class="card-text">{{ relato.texto }}</p>
+    </div>
+    <div class="card-footer text-muted">
+        Publicado por {{ relato.paciente.nome }} em {{ relato.data_postagem|date:"d/m/Y" }}
+    </div>
+</div>
+
+<!-- Botão de Curtida -->
+{% if user.is_authenticated %}
+<form action="{% url 'toggle_curtida' relato.id %}" method="post" class="mb-3">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-success">
+        {% if usuario_curtiu %}
+            ❤️ Descurtir
+        {% else %}
+            🤍 Curtir
+        {% endif %}
+    </button>
+</form>
+{% else %}
+<p><em>Faça login para curtir este relato.</em></p>
+{% endif %}
+
+<!-- Comentários -->
+<h4>Comentários</h4>
+{% for comentario in comentarios %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <strong>{{ comentario.autor.username }}</strong>: {{ comentario.texto }}
+        </div>
+        <div class="card-footer text-muted">
+            {{ comentario.data|date:"d/m/Y H:i" }}
+        </div>
+    </div>
+{% empty %}
+<p>Nenhum comentário ainda.</p>
+{% endfor %}
+
+<!-- Formulário de comentário -->
+{% if user.is_authenticated %}
+<h5>Adicionar comentário</h5>
+<form action="{% url 'adicionar_comentario' relato.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Comentar</button>
+</form>
+{% else %}
+<p><em>Faça login para comentar.</em></p>
+{% endif %}
+
+{% endblock %}

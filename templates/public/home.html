@@ -4,20 +4,21 @@
 
 {% block content %}
 <div class="text-center my-5">
-    <h1 class="display-4">Bem-vindo ao UniRaros</h1>
-    <p class="lead">Sua plataforma informativa e interativa sobre doenças raras.</p>
+    <h1 class="display-5 fw-bold" style="color: var(--roxo);">Bem-vindo ao UniRaros</h1>
+    <p class="lead text-muted">Uma plataforma feita para informar, conectar e inspirar quem convive com doenças raras.</p>
+    <hr class="w-25 mx-auto" style="border: 2px solid var(--verde); opacity: 1;">
 </div>
 
-<h2>Eventos Recentes</h2>
+<h2 class="mb-4" style="color: var(--roxo);">Eventos Recentes</h2>
 <div class="row">
     {% for evento in eventos %}
-    <div class="col-md-4 mb-3">
+    <div class="col-md-4 mb-4">
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">{{ evento.nome }}</h5>
-                <p class="card-text">{{ evento.descricao|truncatechars:80 }}</p>
-                <p class="card-text"><small>Início: {{ evento.data_inicio }}</small></p>
-                <a href="#" class="btn btn-primary">Ver mais</a>
+                <p class="card-text text-muted">{{ evento.descricao|truncatechars:100 }}</p>
+                <p><small>Início: {{ evento.data_inicio }}</small></p>
+                <a href="#" class="btn btn-primary w-100">Ver mais</a>
             </div>
         </div>
     </div>
@@ -26,15 +27,15 @@
     {% endfor %}
 </div>
 
-<h2 class="mt-5">Relatos Recentes</h2>
+<h2 class="mt-5 mb-4" style="color: var(--roxo);">Relatos Recentes</h2>
 <div class="row">
     {% for relato in relatos %}
-    <div class="col-md-4 mb-3">
+    <div class="col-md-4 mb-4">
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">{{ relato.titulo }}</h5>
-                <p class="card-text">{{ relato.resumo|truncatechars:80 }}</p>
-                <a href="#" class="btn btn-success">Ver mais</a>
+                <p class="card-text text-muted">{{ relato.resumo|truncatechars:100 }}</p>
+                <a href="{% url 'relato-detail' relato.id %}" class="btn btn-success w-100">Ver mais</a>
             </div>
         </div>
     </div>
@@ -43,15 +44,15 @@
     {% endfor %}
 </div>
 
-<h2 class="mt-5">Conteúdos Recentes</h2>
+<h2 class="mt-5 mb-4" style="color: var(--roxo);">Conteúdos Recentes</h2>
 <div class="row">
     {% for conteudo in conteudos %}
-    <div class="col-md-4 mb-3">
+    <div class="col-md-4 mb-4">
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">{{ conteudo.titulo }}</h5>
-                <p class="card-text">{{ conteudo.descricao|truncatechars:80 }}</p>
-                <a href="#" class="btn btn-warning">Ver mais</a>
+                <p class="card-text text-muted">{{ conteudo.descricao|truncatechars:100 }}</p>
+                <a href="#" class="btn btn-warning w-100">Ver mais</a>
             </div>
         </div>
     </div>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Relatos - UniRaros{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Relatos da Comunidade</h2>
+
+<div class="text-end mb-3">
+    {% if user.is_authenticated %}
+        <a href="{% url 'relato-create' %}" class="btn btn-primary">+ Novo Relato</a>
+    {% endif %}
+</div>
+
+<div class="row">
+    {% for relato in relatos %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ relato.titulo }}</h5>
+                    <p class="card-text">{{ relato.texto|truncatewords:30 }}</p>
+                    <a href="{% url 'relato-detail' relato.id %}" class="btn btn-outline-primary btn-sm">Ler mais</a>
+                </div>
+                <div class="card-footer text-muted">
+                    Publicado por {{ relato.paciente.nome }} em {{ relato.data_postagem|date:"d/m/Y" }}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Nenhum relato encontrado.</p>
+    {% endfor %}
+</div>
+{% endblock %}
