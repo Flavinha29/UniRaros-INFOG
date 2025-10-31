@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,7 +26,7 @@
         /* Navbar */
         .navbar {
             background-color: var(--roxo);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
         }
 
         .navbar-brand {
@@ -75,13 +76,13 @@
         .card {
             border: none;
             border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .card-title {
@@ -104,6 +105,18 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        /* Estilos para formulários */
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .form-control:focus {
+            border-color: var(--roxo);
+            box-shadow: 0 0 0 0.2rem rgba(91, 44, 111, 0.25);
+        }
     </style>
 </head>
 
@@ -121,10 +134,10 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'sobre' %}">Sobre</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'relatos-list' %}">Relatos</a></li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sair</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sair</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'cadastro:signup' %}">Cadastrar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'cadastro:cadastro_usuario' %}">Cadastrar</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -145,4 +158,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
