@@ -13,4 +13,5 @@ urlpatterns = [
     path('conteudos/', include('conteudos.urls')),
     path('eventos/', include('eventos.urls')),
     path('ajuda/', include('ajuda.urls')),
+    path('cadastro/', include('cadastro.urls')),  # ADICIONAR ESTA LINHA
 ]
