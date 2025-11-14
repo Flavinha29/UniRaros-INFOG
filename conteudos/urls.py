@@ -1,8 +1,7 @@
-# conteudos/urls.py
 from django.urls import path
-from . import views
+from .views import ConteudoListView, ConteudoDetailView
 
 urlpatterns = [
-    path('', views.ConteudoListView.as_view(), name='conteudo-list'),
-    path('<int:pk>/', views.ConteudoDetailView.as_view(), name='conteudo-detail'),
+    path('', ConteudoListView.as_view(), name='lista_conteudos'),
+    path('<int:pk>/', ConteudoDetailView.as_view(), name='detalhe_conteudo'),
 ]

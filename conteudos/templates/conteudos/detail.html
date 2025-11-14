@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+
+        <h2>{{ object.titulo }}</h2>
+        <span class="badge bg-primary mb-3">{{ object.categoria }}</span>
+
+        {% if object.imagem %}
+        <img src="{{ object.imagem.url }}" class="img-fluid mb-4 rounded">
+        {% endif %}
+
+        <h4>Descrição</h4>
+        <p>{{ object.descricao }}</p>
+
+        {% if object.sintomas %}
+        <h4>Sintomas</h4>
+        <p>{{ object.sintomas }}</p>
+        {% endif %}
+
+        {% if object.diagnostico %}
+        <h4>Diagnóstico</h4>
+        <p>{{ object.diagnostico }}</p>
+        {% endif %}
+
+        {% if object.tratamento %}
+        <h4>Tratamento</h4>
+        <p>{{ object.tratamento }}</p>
+        {% endif %}
+
+        {% if object.arquivo_pdf %}
+        <a href="{{ object.arquivo_pdf.url }}" target="_blank" class="btn btn-success mt-3">
+            Baixar PDF
+        </a>
+        {% endif %}
+
+        {% if object.link_referencia %}
+        <a href="{{ object.link_referencia }}" target="_blank" class="btn btn-info mt-3">
+            Ver fonte oficial
+        </a>
+        {% endif %}
+
+        <a href="{% url 'lista_conteudos' %}" class="btn btn-secondary mt-3">Voltar</a>
+    </div>
+
+</div>
+{% endblock %}

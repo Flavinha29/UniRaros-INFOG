@@ -9,3 +9,4 @@ class ConteudoListView(ListView):
 class ConteudoDetailView(DetailView):
     model = Conteudo
     template_name = 'conteudos/detail.html'
+    context_object_name = "conteudo"

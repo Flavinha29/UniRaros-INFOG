@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4">Conteúdos Educativos – Doenças Raras</h2>
+
+    <div class="row">
+
+        {% for c in conteudos %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+
+                {% if c.imagem %}
+                <img src="{{ c.imagem.url }}" class="card-img-top" alt="{{ c.titulo }}">
+                {% else %}
+                <img src="{% static 'img/default.jpg' %}" class="card-img-top">
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ c.titulo }}</h5>
+
+                    <span class="badge bg-primary">{{ c.categoria }}</span>
+
+                    <p class="mt-2 text-muted">{{ c.resumo|truncatewords:20 }}</p>
+
+                    <a href="{% url 'detalhe_conteudo' c.pk %}" class="btn btn-outline-primary mt-2">
+                        Ver mais
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock %}
