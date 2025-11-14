@@ -1,8 +1,7 @@
-# ong/urls.py
 from django.urls import path
-from . import views
+from .views import OngListView, OngDetailView
 
 urlpatterns = [
-    path('', views.OngListView.as_view(), name='ong-list'),
-    path('<int:pk>/', views.OngDetailView.as_view(), name='ong-detail'),
+    path('', OngListView.as_view(), name='ong_list'),
+    path('<int:pk>/', OngDetailView.as_view(), name='ong_detail'),
 ]

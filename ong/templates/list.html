@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+
+    <h2 class="mb-4">ONGs Parceiras</h2>
+
+    <div class="row">
+        {% for ong in ongs %}
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                {% if ong.logo %}
+                <img src="{{ ong.logo.url }}" class="card-img-top" alt="{{ ong.nome }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ ong.nome }}</h5>
+                    <p class="card-text">{{ ong.descricao|truncatechars:120 }}</p>
+                    <a href="{{ ong.get_absolute_url }}" class="btn btn-primary btn-sm">Ver detalhes</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Nenhuma ONG cadastrada ainda.</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
