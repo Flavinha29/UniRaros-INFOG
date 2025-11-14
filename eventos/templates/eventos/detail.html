@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+        <h2>{{ object.nome }}</h2>
+
+        <span class="badge bg-primary mb-3">{{ object.tipo }}</span>
+
+        <p class="text-muted">{{ object.descricao }}</p>
+
+        <p><strong>Início:</strong> {{ object.data_inicio|date:"d/m/Y H:i" }}</p>
+        <p><strong>Término:</strong> {{ object.data_fim|date:"d/m/Y H:i" }}</p>
+
+        {% if object.local %}
+            <p><strong>Local:</strong> {{ object.local }}</p>
+        {% endif %}
+
+        <hr>
+
+        <a href="{% url 'lista_eventos' %}" class="btn btn-secondary">Voltar</a>
+    </div>
+
+</div>
+{% endblock %}

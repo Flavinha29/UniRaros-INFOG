@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Eventos</h2>
+
+    {% if eventos %}
+        <div class="row">
+            {% for evento in eventos %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ evento.nome }}</h5>
+
+                            <span class="badge bg-primary mb-2">{{ evento.tipo }}</span>
+
+                            {% if evento.descricao %}
+                                <p class="card-text text-muted">{{ evento.descricao|truncatewords:20 }}</p>
+                            {% endif %}
+
+                            <p><strong>Início:</strong> {{ evento.data_inicio|date:"d/m/Y H:i" }}</p>
+                            <p><strong>Fim:</strong> {{ evento.data_fim|date:"d/m/Y H:i" }}</p>
+
+                            {% if evento.local %}
+                                <p><strong>Local:</strong> {{ evento.local }}</p>
+                            {% endif %}
+
+                            <a href="{% url 'detalhe_evento' evento.pk %}" class="btn btn-outline-primary mt-2">
+                                Ver detalhes
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h4 class="text-center text-secondary">Nenhum evento cadastrado.</h4>
+    {% endif %}
+</div>
+{% endblock %}
