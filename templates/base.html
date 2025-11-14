@@ -134,6 +134,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'sobre' %}">Sobre</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'relatos-list' %}">Relatos</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'lista_eventos' %}">Eventos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'ong_list' %}">Ongs</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'lista_conteudos' %}">Conteúdos</a></li>
                     {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
@@ -144,7 +145,7 @@
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav>  
 
     <!-- Conteúdo -->
     <main class="container my-5">
