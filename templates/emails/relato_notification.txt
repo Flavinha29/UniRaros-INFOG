@@ -1,0 +1,11 @@
+NOVO RELATO PENDENTE
+
+Paciente: {{ patient_name }}
+Título: {{ report_title }}
+Data: {{ report_date }}
+
+APROVAR: {{ approve_url }}
+REJEITAR: {{ reject_url }}
+
+--
+Sistema Doenças Raras

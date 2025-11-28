@@ -1,0 +1,11 @@
+NOVO CADASTRO DE PACIENTE
+
+Paciente: {{ user.username }}
+Email: {{ user.email }}
+Data: {{ user.date_joined }}
+
+APROVAR: {{ approve_url }}
+REJEITAR: {{ reject_url }}
+
+--
+Sistema Doenças Raras

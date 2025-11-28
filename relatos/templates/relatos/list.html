@@ -5,7 +5,7 @@
 <h2 class="mb-4">Relatos da Comunidade</h2>
 
 <div class="text-end mb-3">
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and user.tipo_usuario == 'paciente' and user.paciente_profile.aprovado %}
         <a href="{% url 'relato-create' %}" class="btn btn-primary">+ Novo Relato</a>
     {% endif %}
 </div>
@@ -20,7 +20,7 @@
                     <a href="{% url 'relato-detail' relato.id %}" class="btn btn-outline-primary btn-sm">Ler mais</a>
                 </div>
                 <div class="card-footer text-muted">
-                    Publicado por {{ relato.paciente.nome }} em {{ relato.data_postagem|date:"d/m/Y" }}
+                    Publicado por {{ relato.paciente.nome_completo }} em {{ relato.data_postagem|date:"d/m/Y" }}
                 </div>
             </div>
         </div>

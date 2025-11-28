@@ -1,0 +1,17 @@
+NOVO PEDIDO DE AJUDA
+
+Usuário: {{ user_name }}
+E-mail: {{ user_email }}
+Tipo: {{ user_type }}
+Assunto: {{ titulo }}
+Data: {{ request_date }}
+
+DESCRIÇÃO:
+{{ descricao }}
+
+LINKS:
+Ver Perfil: {{ user_admin_url }}
+Gerenciar Pedido: {{ admin_url }}
+
+--
+Sistema Doenças Raras
