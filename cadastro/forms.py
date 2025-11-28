@@ -1,7 +1,10 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Paciente
+from django.contrib.auth import get_user_model
+from accounts.models import Paciente
+
+User = get_user_model()
+
 
 class UsuarioForm(UserCreationForm):
     email = forms.EmailField(required=True, label='E-mail')
@@ -9,18 +12,21 @@ class UsuarioForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
-        labels = {
-            'username': 'Nome de usuário',
-            'password1': 'Senha',
-            'password2': 'Confirme a senha',
-        }
+
 
 class PacienteForm(forms.ModelForm):
     senha = forms.CharField(widget=forms.PasswordInput, label="Senha")
+    doenca = forms.CharField(
+        label="Doença",
+        required=False,
+        widget=forms.TextInput()
+    )
+    laudo = forms.FileField(label="Laudo médico", required=False)  # ⬅️ AQUI
 
     class Meta:
         model = Paciente
-        fields = ['nome_completo', 'cpf', 'telefone', 'email', 'laudo', 'senha']
+        fields = ['nome_completo', 'email', 'doenca', 'laudo', 'senha']
+
 
 class LoginForm(forms.Form):
     username_or_email = forms.CharField(
@@ -32,4 +38,3 @@ class LoginForm(forms.Form):
         label="Senha",
         widget=forms.PasswordInput(attrs={'placeholder': 'Digite sua senha'})
     )
-

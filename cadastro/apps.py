@@ -1,4 +1,3 @@
-# cadastro/apps.py
 from django.apps import AppConfig
 
 class CadastroConfig(AppConfig):
@@ -6,4 +5,4 @@ class CadastroConfig(AppConfig):
     name = 'cadastro'
 
     def ready(self):
-        import cadastro.signals
+        pass  # remover o import dos signals

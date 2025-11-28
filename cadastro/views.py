@@ -1,44 +1,80 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
+from django.contrib.auth import get_user_model
 from .forms import UsuarioForm, PacienteForm, LoginForm
 
-# Signup usando classe (opcional)
+User = get_user_model()
+
+
+# ========== CADASTRO COMUM ==========
 class SignupView(CreateView):
     model = User
     form_class = UsuarioForm
-    template_name = 'cadastro/form.html'  # seu template de cadastro
-    success_url = reverse_lazy('login')
+    template_name = 'cadastro/form.html'
+    success_url = reverse_lazy('cadastro:login')
 
-# Cadastro de usuário via função
+
 def cadastrar_usuario(request):
     if request.method == 'POST':
         form = UsuarioForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Cadastro realizado com sucesso! Agora você pode fazer login.')
-            return redirect('login')
+            user = form.save()
+            user.user_type = "staff"  # ✅ CORRIGIDO: user_type em vez de tipo_usuario
+            user.save()
+
+            messages.success(request, 'Cadastro realizado com sucesso!')
+            return redirect('cadastro:login')
     else:
         form = UsuarioForm()
+
     return render(request, 'cadastro/form.html', {'form': form})
 
-# Cadastro de paciente
+
+# ========== CADASTRO DE PACIENTE ==========
 def cadastrar_paciente(request):
     if request.method == 'POST':
         form = PacienteForm(request.POST, request.FILES)
+
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Cadastro de paciente realizado com sucesso! Agora faça login.')
-            return redirect('login')
+            email = form.cleaned_data['email']
+
+            # ----- GERA USERNAME AUTOMÁTICO ÚNICO -----
+            base_username = email.split('@')[0]
+            username = base_username
+            contador = 1
+
+            while User.objects.filter(username=username).exists():
+                username = f"{base_username}{contador}"
+                contador += 1
+
+            # ----- CRIA O USER -----
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=form.cleaned_data['senha'],
+                user_type="patient",  # ✅ CORRIGIDO: user_type
+                status="pending"      # ✅ ADICIONADO: status pendente
+            )
+
+            # ----- CRIA O PACIENTE -----
+            paciente = form.save(commit=False)
+            paciente.user = user
+            paciente.save()
+
+            messages.success(request, 'Paciente cadastrado com sucesso! Aguarde aprovação.')
+            return redirect('cadastro:login')
+
     else:
         form = PacienteForm()
+
     return render(request, 'cadastro/form_paciente.html', {'form': form})
 
-# Login por username ou email
+
+# ========== LOGIN ==========
 def login_view(request):
     form = LoginForm(request.POST or None)
     error = None
@@ -47,40 +83,53 @@ def login_view(request):
         username_or_email = form.cleaned_data['username_or_email']
         senha = form.cleaned_data['senha']
 
-        try:
-            if '@' in username_or_email:
-                user_obj = User.objects.get(email=username_or_email)
-                username = user_obj.username
-            else:
-                username = username_or_email
-        except User.DoesNotExist:
-            username = None
+        if '@' in username_or_email:
+            try:
+                username = User.objects.get(email=username_or_email).username
+            except User.DoesNotExist:
+                username = None
+        else:
+            username = username_or_email
 
         user = authenticate(request, username=username, password=senha)
 
-        if user is not None:
+        if user:
             login(request, user)
-            tipo = user.profile.tipo_usuario
-            if tipo == 0:
-                return redirect('dashboard_admin')
-            elif tipo == 1:
-                return redirect('dashboard_paciente')
-            elif tipo == 2:
-                return redirect('dashboard_usuario')
-        else:
-            error = "Usuário ou senha inválidos"
 
-    return render(request, 'cadastro/login.html', {'form': form, 'error': error})
+            # ✅ CORRIGIDO: user_type em vez de tipo_usuario
+            if user.user_type == "patient":
+                return redirect('cadastro:dashboard_paciente')
+            elif user.user_type == "staff":
+                return redirect('cadastro:dashboard_usuario')
+            else:
+                return redirect('cadastro:dashboard_admin')
 
-# Dashboards
+        error = "Usuário ou senha inválidos."
+
+    return render(request, 'cadastro/login.html', {
+        'form': form,
+        'error': error
+    })
+
+
+# ========== DASHBOARDS ==========
 @login_required
-def admin_dashboard(request):
+def dashboard_admin(request):
     return render(request, 'dashboards/admin.html')
 
-@login_required
-def paciente_dashboard(request):
-    return render(request, 'dashboards/paciente.html')
 
 @login_required
-def usuario_dashboard(request):
+def dashboard_paciente(request):
+    return render(request, 'dashboards/paciente.html')
+
+
+@login_required
+def dashboard_usuario(request):
     return render(request, 'dashboards/usuario.html')
+
+# ========== PERFIL ==========
+@login_required
+def perfil_view(request):
+    return render(request, 'cadastro/perfil.html', {
+        'user': request.user
+    })
