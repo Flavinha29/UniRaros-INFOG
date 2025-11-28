@@ -1,11 +1,15 @@
 # accounts/urls.py
 from django.urls import path
-from django.contrib.auth import views as auth_views
 from . import views
 
+app_name = 'accounts'  # ✅ ADICIONAR APP_NAME PARA ORGANIZAÇÃO
+
 urlpatterns = [
-    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('signup/', views.SignupView.as_view(), name='signup'), #mexi nessa estava escrito "remover"
+    path('logout/', views.custom_logout, name='logout'),
+    path('signup/', views.SignupView.as_view(), name='signup'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    
+    # ✅ URLs DE APROVAÇÃO (SÓ ADMINS)
+    path('user/<int:user_id>/approve/', views.approve_user, name='approve_user'),
+    path('user/<int:user_id>/reject/', views.reject_user, name='reject_user'),
 ]

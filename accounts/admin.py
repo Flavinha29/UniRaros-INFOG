@@ -1,14 +1,14 @@
+# accounts/admin.py
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser, Paciente  # ✅ SÓ CustomUser (Paciente não existe)
 
-# Register your models here.
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Paciente
-
-class UserAdmin(BaseUserAdmin):
-    fieldsets = BaseUserAdmin.fieldsets + (
-        ('Extra', {'fields': ('tipo_usuario',)}),
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    list_display = ['username', 'email', 'user_type', 'status', 'is_staff']
+    list_filter = ['user_type', 'status', 'is_staff']
+    fieldsets = UserAdmin.fieldsets + (
+        ('Informações Adicionais', {
+            'fields': ('user_type', 'status', 'phone', 'birth_date')
+        }),
     )
-
-admin.site.register(User, UserAdmin)
-admin.site.register(Paciente)
