@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ ong.nome }} - UniRaros{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Botão Voltar -->
+    <div class="mb-4">
+        <a href="{% url 'ong_list' %}" class="btn btn-sm" 
+           style="background-color: #f8f9fa; color: var(--roxo); border: 1px solid rgba(0,0,0,0.1);">
+            <i class="bi bi-arrow-left me-2"></i>Voltar para ONGs
+        </a>
+    </div>
+
+    <!-- Card Principal -->
+    <div class="card border-0 shadow-sm" style="border: 1px solid rgba(0,0,0,0.08);">
+        <div class="card-header py-4" style="background-color: #f8f9fa; border-bottom: 1px solid rgba(0,0,0,0.08);">
+            <div class="d-flex align-items-center">
+                {% if ong.imagem %}
+                <img src="{{ ong.imagem.url }}" class="rounded-circle me-3" 
+                     style="width: 70px; height: 70px; object-fit: cover; border: 2px solid #e9ecef;">
+                {% else %}
+                <div class="rounded-circle me-3 d-flex align-items-center justify-content-center" 
+                     style="width: 70px; height: 70px; background-color: rgba(91, 44, 111, 0.1); border: 2px solid #e9ecef;">
+                    <i class="bi bi-building fs-4" style="color: var(--roxo);"></i>
+                </div>
+                {% endif %}
+                <div>
+                    <h1 class="h4 mb-1" style="color: var(--roxo);">{{ ong.nome }}</h1>
+                    <p class="mb-0 text-muted">Organização Não Governamental</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-body p-4">
+            <!-- Descrição -->
+            <div class="mb-5">
+                <h5 class="mb-3" style="color: var(--roxo);">
+                    <i class="bi bi-info-circle me-2"></i>Sobre a Organização
+                </h5>
+                <div class="p-3 rounded" style="background-color: #f8f9fa; border: 1px solid rgba(0,0,0,0.05);">
+                    <p class="mb-0">{{ ong.descricao|linebreaks }}</p>
+                </div>
+            </div>
+            
+            <!-- Informações de Contato -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="p-4 rounded" style="background-color: #f8f9fa; border: 1px solid rgba(0,0,0,0.05);">
+                        <h5 class="mb-4" style="color: var(--roxo);">
+                            <i class="bi bi-telephone me-2"></i>Informações de Contato
+                        </h5>
+                        
+                        {% if ong.telefone %}
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3">
+                                <i class="bi bi-phone" style="color: var(--roxo);"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0" style="color: #495057;">Telefone</h6>
+                                <p class="mb-0 text-muted">{{ ong.telefone }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if ong.email %}
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3">
+                                <i class="bi bi-envelope" style="color: var(--roxo);"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0" style="color: #495057;">E-mail</h6>
+                                <p class="mb-0 text-muted">{{ ong.email }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if ong.endereco %}
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3">
+                                <i class="bi bi-geo-alt" style="color: var(--roxo);"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0" style="color: #495057;">Endereço</h6>
+                                <p class="mb-0 text-muted">{{ ong.endereco }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if ong.site %}
+                <div class="col-md-6">
+                    <div class="p-4 rounded h-100 d-flex flex-column justify-content-center" 
+                         style="background-color: #f8f9fa; border: 1px solid rgba(0,0,0,0.05);">
+                        <h5 class="mb-4" style="color: var(--roxo);">
+                            <i class="bi bi-globe me-2"></i>Site Oficial
+                        </h5>
+                        <div class="text-center">
+                            <a href="{{ ong.site }}" target="_blank" class="btn" 
+                               style="background-color: var(--roxo); color: white;">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>Visitar Site
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Ações -->
+            <div class="mt-5 pt-4 border-top">
+                <div class="d-flex gap-3">
+                    <a href="{% url 'ong_list' %}" class="btn" 
+                       style="background-color: #f8f9fa; color: var(--roxo); border: 1px solid rgba(0,0,0,0.1);">
+                        <i class="bi bi-arrow-left me-2"></i>Voltar para ONGs
+                    </a>
+                    {% if ong.site %}
+                    <a href="{{ ong.site }}" target="_blank" class="btn" 
+                       style="background-color: var(--roxo); color: white;">
+                        <i class="bi bi-heart me-2"></i>Apoiar Esta Causa
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 8px;
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+        border-radius: 6px;
+    }
+    
+    .btn:hover:not([style*="background-color: var(--roxo)"]) {
+        background-color: var(--roxo) !important;
+        color: white !important;
+        border-color: var(--roxo) !important;
+    }
+</style>
+{% endblock %}

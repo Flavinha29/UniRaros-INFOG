@@ -1,0 +1,50 @@
+[
+{
+  "model": "accounts.customuser",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$8XjFYL0PW6xplSDself3J9$ic7uv/ZD+9wR8N1CnR11S8Qvhpns8DBA3dx89UkcBFY=",
+    "last_login": "2025-11-30T19:46:06.479Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-30T19:45:30.107Z",
+    "user_type": "patient",
+    "status": "pending",
+    "phone": "",
+    "birth_date": null,
+    "created_at": "2025-11-30T19:45:30.456Z",
+    "updated_at": "2025-11-30T19:45:30.456Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$UMLsFJPvPfp9vd34yDbtq4$pFCSPbhBl+xx1KJr9zsW9K+NdYLj1AE4q04jmjziPzw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "flaviaeduarda485",
+    "first_name": "FLAVIA",
+    "last_name": "DOMINGOS",
+    "email": "flaviaeduarda485@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-30T19:52:36.106Z",
+    "user_type": "patient",
+    "status": "pending",
+    "phone": "35999190776",
+    "birth_date": null,
+    "created_at": "2025-11-30T19:52:37.036Z",
+    "updated_at": "2025-11-30T19:52:37.036Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]
