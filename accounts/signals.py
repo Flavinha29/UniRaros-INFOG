@@ -1,4 +1,3 @@
-# accounts/signals.py
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
@@ -6,28 +5,45 @@ from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.urls import reverse
-from .models import Paciente 
+import time
 
 User = get_user_model()
 
 @receiver(post_save, sender=User)
 def send_registration_notification(sender, instance, created, **kwargs):
-    """✅ ENVIA EMAIL QUANDO UM PACIENTE SE CADASTRA"""
+    """✅ ENVIA EMAIL QUANDO UM PACIENTE SE CADASTRA - CORRIGIDO"""
     if created and instance.user_type == 'patient':
+        # ✅ AGUARDA 2 SEGUNDOS PARA O PACIENTE SER CRIADO
+        time.sleep(2)
+        
         admin_emails = settings.ADMIN_EMAILS
+        
+        # ✅ TENTA OBTER DADOS DO PACIENTE SE EXISTIR
+        paciente_data = {}
+        try:
+            if hasattr(instance, 'paciente_profile'):
+                paciente = instance.paciente_profile
+                paciente_data = {
+                    'Doença': paciente.doenca or 'Não informada',
+                    'Laudo': 'Sim' if paciente.laudo else 'Não',
+                }
+        except:
+            paciente_data = {
+                'Doença': 'Ainda não disponível',
+                'Laudo': 'Ainda não disponível',
+            }
         
         # Coletar todos os dados do usuário
         user_data = {
             'Nome de usuário': instance.username,
             'E-mail': instance.email,
-            'Nome': instance.first_name or 'Não informado',
-            'Sobrenome': instance.last_name or 'Não informado',
             'Nome completo': f"{instance.first_name} {instance.last_name}".strip() or 'Não informado',
             'Telefone': instance.phone or 'Não informado',
             'Data de nascimento': instance.birth_date.strftime('%d/%m/%Y') if instance.birth_date else 'Não informada',
             'Tipo de usuário': instance.get_user_type_display(),
             'Status': instance.get_status_display(),
             'Data de registro': instance.date_joined.strftime('%d/%m/%Y às %H:%M'),
+            **paciente_data  # ✅ INCLUI DADOS DO PACIENTE
         }
         
         context = {

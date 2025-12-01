@@ -24,7 +24,12 @@ class CustomUser(AbstractUser):
         choices=STATUS_CHOICES, 
         default='pending'
     )
-    phone = models.CharField(max_length=20, blank=True, verbose_name="Telefone")
+    # ✅ TELEFONE AGORA OBRIGATÓRIO
+    phone = models.CharField(
+        max_length=20, 
+        verbose_name="Telefone",
+        blank=False
+    )
     birth_date = models.DateField(null=True, blank=True, verbose_name="Data de Nascimento")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -48,18 +53,3 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f"{self.username} ({self.get_user_type_display()})"
-class Paciente(models.Model):
-    user = models.OneToOneField(
-        CustomUser, 
-        on_delete=models.CASCADE, 
-        related_name='paciente_profile'
-    )
-    nome_completo = models.CharField(max_length=255)
-    email = models.EmailField()
-    
-    def __str__(self):
-        return self.nome_completo
-
-    class Meta:
-        verbose_name = 'Paciente'
-        verbose_name_plural = 'Pacientes'

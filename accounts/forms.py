@@ -1,15 +1,35 @@
-# accounts/forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth import get_user_model
 from .validators import PasswordValidator
 
-User = get_user_model()  # ✅ USA get_user_model() EM VEZ DE IMPORTAR DIRETO
+User = get_user_model()
 
 class UserCreationFormCustom(UserCreationForm):
-    # ✅ CORRIGIDO: usar user_type em vez de tipo_usuario
+    # ✅ PRIMEIRO NOME OBRIGATÓRIO
+    first_name = forms.CharField(
+        max_length=30,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Seu primeiro nome'
+        }),
+        label="Primeiro Nome"
+    )
+    
+    # ✅ SOBRENOME OBRIGATÓRIO
+    last_name = forms.CharField(
+        max_length=30,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Seu sobrenome'
+        }),
+        label="Sobrenome"
+    )
+    
     user_type = forms.ChoiceField(
-        choices=User.USER_TYPE_CHOICES,  # ✅ CORRIGIDO: USER_TYPE_CHOICES
+        choices=User.USER_TYPE_CHOICES,
         required=True,
         widget=forms.Select(attrs={
             'class': 'form-control'
@@ -17,9 +37,10 @@ class UserCreationFormCustom(UserCreationForm):
         label="Tipo de Usuário"
     )
     
+    # ✅ TELEFONE OBRIGATÓRIO
     phone = forms.CharField(
         max_length=20, 
-        required=False,
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': '(11) 99999-9999'
@@ -57,7 +78,7 @@ class UserCreationFormCustom(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2", "user_type", "phone", "birth_date")
+        fields = ("username", "first_name", "last_name", "email", "password1", "password2", "user_type", "phone", "birth_date")
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -72,17 +93,13 @@ class UserCreationFormCustom(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.user_type = self.cleaned_data["user_type"]
+        user.phone = self.cleaned_data["phone"]
         
-        user.phone = self.cleaned_data.get("phone", "")
-        user.birth_date = self.cleaned_data.get("birth_date")
-        
-        # ✅ CORRIGIDO: patient em vez de paciente
         if user.user_type == "patient":
             user.status = "pending"
         
         if commit:
             user.save()
-            # ✅ REMOVIDO: criação de Paciente (não temos esse model)
         return user
 
 class CustomPasswordResetForm(PasswordResetForm):

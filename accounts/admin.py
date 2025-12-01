@@ -1,7 +1,7 @@
 # accounts/admin.py
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, Paciente  # ✅ SÓ CustomUser (Paciente não existe)
+from .models import CustomUser  # ✅ APENAS CustomUser
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
