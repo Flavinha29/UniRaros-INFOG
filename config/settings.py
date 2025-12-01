@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cadastro.apps.CadastroConfig',
 
     # SEUS APPS
     'accounts',      # App de usuários
@@ -26,8 +27,7 @@ INSTALLED_APPS = [
     'eventos',       # App de eventos
     'ajuda',         # App de ajuda
     'core',          # App core
-    'cadastro',      # App de cadastro
-
+       
     # EXTRAS
     'widget_tweaks',
 ]
