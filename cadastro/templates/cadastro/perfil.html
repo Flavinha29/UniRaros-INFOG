@@ -3,18 +3,56 @@
 {% block title %}Meu Perfil{% endblock %}
 
 {% block content %}
+
+<style>
+    .btn-roxo {
+        background-color: #5B2C6F;
+        color: #FFFFFF;
+        border: none;
+    }
+    .btn-roxo:hover {
+        background-color: #4a255d;
+    }
+
+    .btn-verde {
+        background-color: #28A745;
+        color: #FFFFFF;
+        border: none;
+    }
+    .btn-verde:hover {
+        background-color: #218838;
+    }
+    .btn-roxo-borda {
+    background-color: transparent;
+    color: #5B2C6F;
+    border: 2px solid #5B2C6F;
+    }
+
+    .btn-roxo-borda:hover {
+    background-color: #f5f5f5;
+    }
+
+</style>
+
 <div class="container mt-5" style="max-width: 700px;">
     <h2 class="text-center mb-4">Meu Perfil</h2>
 
     <div class="card shadow p-4">
+
         <div class="d-flex align-items-center mb-4">
-            <!-- Foto do usuário -->
-            {% if user.profile.image.url %}
-                <img src="{{ user.profile.image.url }}" alt="Foto do usuário" class="rounded-circle me-3" style="width:100px; height:100px; object-fit:cover;">
+
+            {% if user.profile and user.profile.image %}
+                <img src="{{ user.profile.image.url }}"
+                     alt="Foto do usuário"
+                     class="rounded-circle me-3"
+                     style="width:100px; height:100px; object-fit:cover;">
             {% else %}
-                <img src="https://via.placeholder.com/100" alt="Foto do usuário" class="rounded-circle me-3">
+                <img src="/media/profiles/default.png"
+                     alt="Foto padrão"
+                     class="rounded-circle me-3"
+                     style="width:100px; height:100px; object-fit:cover;">
             {% endif %}
-            
+
             <div>
                 <h4>{{ user.get_full_name|default:user.username }}</h4>
                 <p class="text-muted">{{ user.email }}</p>
@@ -23,21 +61,27 @@
 
         <hr>
 
-        <!-- Informações adicionais -->
         <div class="mb-3">
             <p><strong>Nome de usuário:</strong> {{ user.username }}</p>
             <p><strong>Nome completo:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-            <p><strong>Tipo de usuário:</strong> {{ user.tipo_usuario|capfirst }}</p>
         </div>
 
         <hr>
 
-        <!-- Botões de ação -->
         <div class="d-grid gap-2">
-            <a href="{% url 'password_change' %}" class="btn btn-primary">Alterar Senha</a>
-            <a href="#" class="btn btn-secondary" disabled>Editar Perfil</a>
-            <a href="#" class="btn btn-info text-white" disabled>Alterar Foto</a>
+            <a href="{% url 'password_change' %}" class="btn btn-roxo">Alterar Senha</a>
+
+            <a href="{% url 'cadastro:editar_perfil' %}" 
+            class="btn btn-roxo-borda">
+            Editar Perfil
+            </a>
+
+            <a href="{% url 'cadastro:alterar_foto' %}" class="btn btn-verde text-white">
+                Alterar Foto
+            </a>
         </div>
+
     </div>
 </div>
+
 {% endblock %}

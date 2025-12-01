@@ -6,3 +6,4 @@ class CadastroConfig(AppConfig):
 
     def ready(self):
         pass  # remover o import dos signals
+        import cadastro.signals

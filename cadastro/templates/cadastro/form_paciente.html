@@ -4,24 +4,92 @@
 {% block title %}Cadastro de Paciente - UniRaros{% endblock %}
 
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh; background: linear-gradient(to right, #f8f9fa, #e9ecef);">
+<div class="container d-flex justify-content-center align-items-center"
+    style="min-height: 90vh; background: linear-gradient(to right, #f8f9fa, #e9ecef);">
     <div class="card shadow-lg p-5 rounded-4" style="max-width: 500px; width: 100%; border: none;">
         <h2 class="text-center mb-4" style="color: var(--roxo); font-weight: 600;">Cadastro de Paciente</h2>
+
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            
-            {% for field in form %}
+
+            <!-- CAMPOS OBRIGATÓRIOS DO USER -->
             <div class="form-floating mb-3">
-                {{ field|add_class:"form-control" }}
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {% if field.help_text %}
-                <div class="form-text">{{ field.help_text }}</div>
-                {% endif %}
-                {% for error in field.errors %}
+                {{ form.first_name|add_class:"form-control" }}
+                <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }} <span class="text-danger">*</span></label>
+                {% for error in form.first_name.errors %}
                 <div class="text-danger small">{{ error }}</div>
                 {% endfor %}
             </div>
-            {% endfor %}
+
+            <div class="form-floating mb-3">
+                {{ form.last_name|add_class:"form-control" }}
+                <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }} <span class="text-danger">*</span></label>
+                {% for error in form.last_name.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-floating mb-3">
+                {{ form.email|add_class:"form-control" }}
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }} <span class="text-danger">*</span></label>
+                {% for error in form.email.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-floating mb-3">
+                {{ form.phone|add_class:"form-control" }}
+                <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }} <span class="text-danger">*</span></label>
+                {% for error in form.phone.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- CAMPOS DE SENHA COM OLHO -->
+            <div class="mb-3">
+                <label class="form-label">{{ form.senha.label }} <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    {{ form.senha|add_class:"form-control" }}
+                    <button type="button" class="btn btn-outline-secondary"
+                        onclick="togglePassword('{{ form.senha.id_for_label }}')">
+                        <i class="bi bi-eye" id="icon-{{ form.senha.id_for_label }}"></i>
+                    </button>
+                </div>
+                {% for error in form.senha.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.confirm_senha.label }} <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    {{ form.confirm_senha|add_class:"form-control" }}
+                    <button type="button" class="btn btn-outline-secondary"
+                        onclick="togglePassword('{{ form.confirm_senha.id_for_label }}')">
+                        <i class="bi bi-eye" id="icon-{{ form.confirm_senha.id_for_label }}"></i>
+                    </button>
+                </div>
+                {% for error in form.confirm_senha.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- CAMPOS OPCIONAIS DO PACIENTE -->
+            <div class="form-floating mb-3">
+                {{ form.doenca|add_class:"form-control" }}
+                <label for="{{ form.doenca.id_for_label }}">{{ form.doenca.label }}</label>
+                {% for error in form.doenca.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.laudo.label }}</label>
+                {{ form.laudo|add_class:"form-control" }}
+                {% for error in form.laudo.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
 
             <button type="submit" class="btn btn-success w-100 mt-3 rounded-pill shadow-sm">Cadastrar</button>
         </form>
@@ -36,4 +104,24 @@
         </div>
     </div>
 </div>
+
+<script>
+function togglePassword(id) {
+    const input = document.getElementById(id);
+    const icon = document.getElementById("icon-" + id);
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+    }
+}
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 {% endblock %}

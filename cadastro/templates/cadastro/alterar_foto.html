@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+    <h3 class="mb-3">Alterar Foto</h3>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label class="form-label">Selecione a nova foto</label>
+        <input type="file" name="image" class="form-control">
+
+        <button class="btn w-100 mt-4" style="background:#5B2C6F; color:white;">Salvar Foto</button>
+    </form>
+</div>
+{% endblock %}
