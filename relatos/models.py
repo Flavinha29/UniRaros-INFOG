@@ -11,7 +11,8 @@ class Relato(models.Model):
         ('rejected', 'Rejeitado'),
     ]
     
-    paciente = models.ForeignKey('accounts.Paciente', on_delete=models.CASCADE, related_name='relatos')
+    # ✅ CORRIGIDO: Agora referencia cadastro.Paciente
+    paciente = models.ForeignKey('cadastro.Paciente', on_delete=models.CASCADE, related_name='relatos')
     titulo = models.CharField(max_length=255)
     texto = models.TextField()
     data_postagem = models.DateTimeField(default=timezone.now)

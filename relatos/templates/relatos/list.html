@@ -2,30 +2,119 @@
 {% block title %}Relatos - UniRaros{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Relatos da Comunidade</h2>
+<div class="container my-5">
+    <!-- Cabeçalho -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold mb-3" style="color: var(--roxo);">
+            <i class="bi bi-chat-heart me-2"></i>Relatos da Comunidade
+        </h1>
+        <p class="lead fs-5 text-muted" style="max-width: 700px; margin: 0 auto;">
+            Histórias reais, esperanças compartilhadas, vidas transformadas.
+        </p>
+        <div class="mt-3">
+            <div style="width: 80px; height: 3px; background-color: var(--roxo); margin: 0 auto; border-radius: 2px;"></div>
+        </div>
+    </div>
 
-<div class="text-end mb-3">
-    {% if user.is_authenticated and user.tipo_usuario == 'paciente' and user.paciente_profile.aprovado %}
-        <a href="{% url 'relato-create' %}" class="btn btn-primary">+ Novo Relato</a>
+    <!-- ✅ BOTÃO CORRIGIDO: Condição atualizada -->
+    {% if user.is_authenticated %}
+        {% if user.user_type == 'patient' and user.status == 'approved' or user.user_type == 'admin' %}
+        <div class="text-end mb-4">
+            <a href="{% url 'relatos:relato-create' %}" class="btn" 
+               style="background-color: var(--roxo); color: white; border-radius: 8px;">
+                <i class="bi bi-plus-circle me-2"></i>Novo Relato
+            </a>
+        </div>
+        {% endif %}
     {% endif %}
-</div>
 
-<div class="row">
-    {% for relato in relatos %}
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">{{ relato.titulo }}</h5>
-                    <p class="card-text">{{ relato.texto|truncatewords:30 }}</p>
-                    <a href="{% url 'relato-detail' relato.id %}" class="btn btn-outline-primary btn-sm">Ler mais</a>
-                </div>
-                <div class="card-footer text-muted">
-                    Publicado por {{ relato.paciente.nome_completo }} em {{ relato.data_postagem|date:"d/m/Y" }}
+    <div class="row justify-content-center">
+        {% for relato in relatos %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm" style="transition: transform 0.3s ease; border: 1px solid rgba(0,0,0,0.08);">
+                    <div class="card-header py-3" style="background-color: #f8f9fa; border-bottom: 1px solid rgba(0,0,0,0.08);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0" style="color: var(--roxo);">{{ relato.titulo }}</h5>
+                            {% if relato.status == 'pending' %}
+                            <span class="badge rounded-pill bg-warning text-dark">Pendente</span>
+                            {% elif relato.status == 'approved' %}
+                            <span class="badge rounded-pill" style="background-color: rgba(40, 167, 69, 0.1); color: var(--verde);">Aprovado</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p class="card-text text-muted">{{ relato.texto|truncatewords:40 }}</p>
+                        
+                        <div class="mt-3 pt-3 border-top">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">
+                                    <i class="bi bi-calendar me-1"></i> {{ relato.data_postagem|date:"d/m/Y" }}
+                                </span>
+                                <span class="text-muted">
+                                    <i class="bi bi-chat-left me-1"></i> {{ relato.comentarios.count }}
+                                    <i class="bi bi-heart ms-3 me-1" style="color: #dc3545;"></i> {{ relato.curtidas.count }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-white border-0 pt-0" style="border-top: 1px solid rgba(0,0,0,0.08);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small">
+                                <i class="bi bi-person me-1"></i> 
+                                {% if relato.paciente.user.first_name %}
+                                    {{ relato.paciente.user.first_name }} {{ relato.paciente.user.last_name|default:"" }}
+                                {% else %}
+                                    {{ relato.paciente.user.username }}
+                                {% endif %}
+                            </span>
+                            <a href="{% url 'relatos:relato-detail' relato.id %}" class="btn btn-sm" 
+                               style="background-color: #f8f9fa; color: var(--roxo); border: 1px solid rgba(91, 44, 111, 0.2);">
+                                <i class="bi bi-book-open me-1"></i>Ler mais
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5" style="background-color: #f8f9fa; border-radius: 10px; border: 1px solid rgba(0,0,0,0.08);">
+                <i class="bi bi-chat-square-text display-1 mb-3" style="color: #adb5bd;"></i>
+                <h5 style="color: var(--roxo);">Nenhum relato encontrado</h5>
+                <p class="text-muted">Seja o primeiro a compartilhar sua história!</p>
+                
+                <!-- ✅ BOTÃO TAMBÉM APARECE AQUI SE O USUÁRIO PODE CRIAR -->
+                {% if user.is_authenticated %}
+                    {% if user.user_type == 'patient' and user.status == 'approved' or user.user_type == 'admin' %}
+                    <a href="{% url 'relatos:relato-create' %}" class="btn mt-3" 
+                       style="background-color: var(--roxo); color: white;">
+                        <i class="bi bi-plus-circle me-2"></i>Criar Primeiro Relato
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
-    {% empty %}
-        <p>Nenhum relato encontrado.</p>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
+
+<style>
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08) !important;
+        border-color: rgba(91, 44, 111, 0.2) !important;
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+        border-radius: 6px;
+    }
+    
+    .btn:hover {
+        background-color: var(--roxo) !important;
+        color: white !important;
+        border-color: var(--roxo) !important;
+    }
+</style>
 {% endblock %}

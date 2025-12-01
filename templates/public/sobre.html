@@ -3,15 +3,174 @@
 {% block title %}Sobre - UniRaros{% endblock %}
 
 {% block content %}
-<div class="text-center my-5">
-    <h1>Sobre o UniRaros</h1>
-    <p class="lead">O UniRaros é uma plataforma desenvolvida para informar e conectar pessoas sobre doenças raras.</p>
+<div class="container my-5">
+    <!-- Cabeçalho com imagem -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold" style="color: var(--roxo);">Sobre o UniRaros</h1>
+        <div class="my-4">
+            <i class="bi bi-heart-pulse-fill" style="font-size: 4rem; color: var(--verde);"></i>
+        </div>
+        <p class="lead fs-4" style="color: #5a5a5a;">
+            Conectando pessoas, compartilhando esperança e transformando vidas
+        </p>
+    </div>
+
+    <!-- Missão, Visão, Valores -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-bullseye" style="font-size: 2.5rem; color: var(--roxo);"></i>
+                    </div>
+                    <h3 class="h4 mb-3" style="color: var(--roxo);">Nossa Missão</h3>
+                    <p class="card-text">
+                        Proporcionar informações confiáveis, criar uma comunidade de apoio e 
+                        facilitar o acesso a recursos sobre doenças raras, promovendo qualidade 
+                        de vida e bem-estar.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-eye" style="font-size: 2.5rem; color: var(--roxo);"></i>
+                    </div>
+                    <h3 class="h4 mb-3" style="color: var(--roxo);">Nossa Visão</h3>
+                    <p class="card-text">
+                        Ser referência nacional no apoio e informação sobre doenças raras, 
+                        criando uma rede onde nenhuma pessoa se sinta sozinha em sua jornada.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-heart" style="font-size: 2.5rem; color: var(--roxo);"></i>
+                    </div>
+                    <h3 class="h4 mb-3" style="color: var(--roxo);">Nossos Valores</h3>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Empatia e acolhimento</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Informação confiável</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Respeito à diversidade</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Transparência</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- O que oferecemos -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4" style="color: var(--roxo);">O Que Oferecemos</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-chat-square-text-fill fs-3" style="color: var(--verde);"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 style="color: var(--roxo);">Relatos Inspiradores</h5>
+                            <p>Compartilhe e leia histórias reais de pacientes e familiares, criando uma rede de apoio e esperança.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-calendar-event-fill fs-3" style="color: var(--verde);"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 style="color: var(--roxo);">Eventos Especiais</h5>
+                            <p>Participe de palestras, workshops e encontros com especialistas na área de doenças raras.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-book-fill fs-3" style="color: var(--verde);"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 style="color: var(--roxo);">Conteúdo Educacional</h5>
+                            <p>Acesse materiais informativos, artigos científicos e guias práticos sobre diversas condições.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-people-fill fs-3" style="color: var(--verde);"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 style="color: var(--roxo);">Rede de Apoio</h5>
+                            <p>Conecte-se com outras pessoas, ONGs e profissionais que entendem sua jornada.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nossa História -->
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <h2 style="color: var(--roxo);">Nossa História</h2>
+            <p class="fs-5">
+                O UniRaros nasceu da necessidade de criar um espaço seguro e informativo 
+                para pessoas afetadas por doenças raras. Percebemos que muitas famílias 
+                enfrentavam dificuldades para encontrar informações confiáveis e apoio 
+                emocional durante suas jornadas.
+            </p>
+            <p class="fs-5">
+                Desde 2025, trabalhamos para construir uma plataforma que não apenas 
+                informa, mas também conecta, apoia e capacita pacientes, familiares e 
+                profissionais de saúde.
+            </p>
+        </div>
+        <div class="col-md-6 text-center">
+            <div class="p-4 rounded" style="background-color: rgba(91, 44, 111, 0.1); border: 2px dashed var(--roxo);">
+                <i class="bi bi-building" style="font-size: 5rem; color: var(--roxo); opacity: 0.7;"></i>
+                <h4 class="mt-3" style="color: var(--roxo);">+500 Membros</h4>
+                <p class="mb-0">Fazendo parte da nossa comunidade</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chamada para ação -->
+    <div class="text-center py-5 rounded-3" style="background: linear-gradient(135deg, var(--roxo), #7b3fa0);">
+        <h3 class="text-white mb-3">Junte-se à Nossa Comunidade</h3>
+        <p class="text-white-50 mb-4 fs-5">
+            Sua jornada não precisa ser solitária. Encontre apoio, informações e conexões reais.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'cadastro:cadastro_usuario' %}" class="btn btn-light btn-lg px-4" style="color: var(--roxo);">
+                <i class="bi bi-person-plus me-2"></i>Cadastre-se
+            </a>
+            <a href="{% url 'relatos:relatos-list' %}" class="btn btn-outline-light btn-lg px-4">
+                <i class="bi bi-chat-left-text me-2"></i>Ver Relatos
+            </a>
+        </div>
+    </div>
 </div>
 
-<div class="container mt-4">
-    <p>
-        Aqui você pode acompanhar eventos, relatos e conteúdos educacionais relacionados a doenças raras.
-        Nosso objetivo é fornecer informações confiáveis e promover a interação entre pacientes, familiares e profissionais de saúde.
-    </p>
-</div>
+<style>
+    .card:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+    }
+    .list-unstyled li {
+        margin-bottom: 0.5rem;
+    }
+</style>
 {% endblock %}

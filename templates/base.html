@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}UniRaros{% endblock %}</title>
 
@@ -19,8 +20,51 @@
         .navbar { background-color: var(--roxo); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
         .nav-link { color: var(--branco) !important; transition: 0.3s; }
         .nav-link:hover { color: var(--verde) !important; }
+        
+        /* ✅ ESTILO PARA O BOTÃO DE LOGOUT */
+        .logout-btn {
+            background: none !important;
+            border: none !important;
+            color: var(--branco) !important;
+            text-decoration: none;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+        }
+        .logout-btn:hover {
+            color: var(--verde) !important;
+        }
     </style>
 </head>
+
+<script>
+document.addEventListener('click', function(e){
+    // clique em ícone com classe .toggle-password
+    const toggle = e.target.closest('.toggle-password');
+    if (!toggle) return;
+
+    // se tiver data-target usa; senão procura input tipo password dentro do mesmo .input-group
+    const targetSelector = toggle.getAttribute('data-target');
+    let input = null;
+    if (targetSelector) {
+        input = document.querySelector(targetSelector);
+    } else {
+        const ig = toggle.closest('.input-group');
+        if (ig) input = ig.querySelector('input[type="password"], input[type="text"]');
+    }
+    if (!input) return;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        // troca ícone se estiver usando bootstrap icons
+        toggle.querySelector('i')?.classList.remove('bi-eye');
+        toggle.querySelector('i')?.classList.add('bi-eye-slash');
+    } else {
+        input.type = 'password';
+        toggle.querySelector('i')?.classList.remove('bi-eye-slash');
+        toggle.querySelector('i')?.classList.add('bi-eye');
+    }
+});
+</script>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -49,7 +93,15 @@
                         <!-- PERFIL -->
                         <li class="nav-item"><a class="nav-link" href="{% url 'cadastro:perfil' %}">Perfil</a></li>
 
-                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sair</a></li>
+                        <!-- ✅ LOGOUT CORRETO -->
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-btn">
+                                    Sair
+                                </button>
+                            </form>
+                        </li>
                     {% else %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'cadastro:login' %}">Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'cadastro:cadastro_usuario' %}">Cadastrar</a></li>

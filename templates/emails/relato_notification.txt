@@ -1,11 +1,28 @@
-NOVO RELATO PENDENTE
+NOVO RELATO PARA APROVAÇÃO - UniRaros
 
-Paciente: {{ patient_name }}
-Título: {{ report_title }}
-Data: {{ report_date }}
+Olá Administrador,
 
-APROVAR: {{ approve_url }}
-REJEITAR: {{ reject_url }}
+Um novo relato foi submetido para aprovação no sistema UniRaros.
 
---
-Sistema Doenças Raras
+DETALHES DO RELATO:
+-------------------
+Paciente: {{ relato.paciente.user.get_full_name|default:relato.paciente.user.username }}
+Email do paciente: {{ relato.paciente.user.email }}
+Título: {{ relato.titulo }}
+Data de envio: {{ data }}
+
+Conteúdo:
+{{ relato.texto|truncatechars:300 }}
+
+{% if relato.texto|length > 300 %}
+(Conteúdo truncado. Veja o relato completo no painel admin)
+{% endif %}
+
+ACESSAR RELATO:
+{{ admin_url }}
+
+Para aprovar ou rejeitar este relato, acesse o painel administrativo.
+
+---
+Este é um email automático do Sistema UniRaros.
+© {% now "Y" %} UniRaros - Todos os direitos reservados.

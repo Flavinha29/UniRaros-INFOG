@@ -1,0 +1,31 @@
+<!-- templates/registration/login.html -->
+{% extends 'base.html' %}
+
+{% block title %}Login - UniRaros{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Entrar</h2>
+                
+                <!-- Redireciona para o login customizado -->
+                <div class="text-center">
+                    <p>Redirecionando para login...</p>
+                    <a href="{% url 'cadastro:login' %}" class="btn btn-primary">
+                        Clique aqui para fazer login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Redireciona automaticamente após 2 segundos
+    setTimeout(function() {
+        window.location.href = "{% url 'cadastro:login' %}";
+    }, 2000);
+</script>
+{% endblock %}

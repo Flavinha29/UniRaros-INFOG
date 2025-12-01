@@ -2,11 +2,200 @@
 {% block title %}Novo Relato - UniRaros{% endblock %}
 
 {% block content %}
-<h2>Novo Relato</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Salvar</button>
-    <a href="{% url 'relatos_list' %}" class="btn btn-secondary">Cancelar</a>
-</form>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Cabeçalho -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3" style="color: var(--roxo);">
+                    <i class="bi bi-chat-heart me-2"></i>Compartilhe Sua História
+                </h1>
+                <p class="lead text-muted">
+                    Sua experiência pode inspirar e ajudar outras pessoas que enfrentam desafios semelhantes.
+                </p>
+                <div class="mt-3">
+                    <div style="width: 80px; height: 3px; background-color: var(--roxo); margin: 0 auto; border-radius: 2px;"></div>
+                </div>
+            </div>
+
+            <!-- Card do Formulário -->
+            <div class="card border-0 shadow-sm" style="border: 1px solid rgba(0,0,0,0.08);">
+                <div class="card-header py-3" style="background-color: #f8f9fa; border-bottom: 1px solid rgba(0,0,0,0.08);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0" style="color: var(--roxo);">
+                            <i class="bi bi-pencil me-2"></i>Novo Relato
+                        </h5>
+                        <span class="badge rounded-pill" style="background-color: rgba(91, 44, 111, 0.1); color: var(--roxo);">
+                            <i class="bi bi-person me-1"></i>{{ user_name }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    <!-- Mensagens -->
+                    {% if messages %}
+                    <div class="mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                            <i class="bi 
+                                {% if message.tags == 'success' %}bi-check-circle-fill
+                                {% elif message.tags == 'error' or message.tags == 'danger' %}bi-exclamation-circle-fill
+                                {% elif message.tags == 'warning' %}bi-exclamation-triangle-fill
+                                {% else %}bi-info-circle-fill{% endif %}
+                            me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Campo Título -->
+                        <div class="mb-4">
+                            <label for="{{ form.titulo.id_for_label }}" class="form-label fw-medium" style="color: var(--roxo);">
+                                <i class="bi bi-type me-1"></i>Título
+                            </label>
+                            {{ form.titulo }}
+                            {% if form.titulo.errors %}
+                            <div class="text-danger small mt-2">
+                                {% for error in form.titulo.errors %}
+                                <div><i class="bi bi-x-circle me-1"></i>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="form-text mt-1">
+                                <i class="bi bi-lightbulb me-1"></i>Um bom título chama atenção e resume sua história.
+                            </div>
+                        </div>
+                        
+                        <!-- Campo Texto -->
+                        <div class="mb-4">
+                            <label for="{{ form.texto.id_for_label }}" class="form-label fw-medium" style="color: var(--roxo);">
+                                <i class="bi bi-text-paragraph me-1"></i>Seu Relato
+                            </label>
+                            {{ form.texto }}
+                            {% if form.texto.errors %}
+                            <div class="text-danger small mt-2">
+                                {% for error in form.texto.errors %}
+                                <div><i class="bi bi-x-circle me-1"></i>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="form-text mt-1">
+                                <i class="bi bi-info-circle me-1"></i>Conte sua história com detalhes. Será revisado antes da publicação.
+                            </div>
+                        </div>
+                        
+                        <!-- Informações Importantes -->
+                        <div class="alert alert-info mt-4">
+                            <div class="d-flex">
+                                <i class="bi bi-shield-check fs-5 me-3" style="color: var(--roxo);"></i>
+                                <div>
+                                    <h6 class="alert-heading" style="color: var(--roxo);">Importante</h6>
+                                    <p class="mb-2">
+                                        <i class="bi bi-clock-history me-1"></i>Seu relato será enviado para aprovação antes de ser publicado.
+                                    </p>
+                                    <p class="mb-0">
+                                        <i class="bi bi-eye me-1"></i>Apenas relatos aprovados ficam visíveis para a comunidade.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Botões -->
+                        <div class="d-flex gap-3 mt-5 pt-4 border-top">
+                            <a href="{% url 'relatos:relatos-list' %}" class="btn flex-fill" 
+                               style="background-color: #f8f9fa; color: var(--roxo); border: 1px solid rgba(0,0,0,0.1);">
+                                <i class="bi bi-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn flex-fill" style="background-color: var(--roxo); color: white;">
+                                <i class="bi bi-send me-2"></i>Enviar para Aprovação
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card-footer py-3" style="background-color: #f8f9fa; border-top: 1px solid rgba(0,0,0,0.08);">
+                    <div class="text-center text-muted small">
+                        <i class="bi bi-lock me-1"></i>Suas informações são protegidas e sua privacidade é respeitada.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilização dos campos do formulário */
+    .form-control {
+        border: 1px solid rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        padding: 0.75rem;
+        width: 100%;
+        font-family: inherit;
+    }
+    
+    .form-control:focus {
+        border-color: var(--roxo);
+        box-shadow: 0 0 0 0.25rem rgba(91, 44, 111, 0.25);
+        outline: none;
+    }
+    
+    textarea.form-control {
+        min-height: 200px;
+    }
+    
+    /* Estilização dos botões */
+    .btn {
+        transition: all 0.3s ease;
+        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn:hover:not([style*="background-color: var(--roxo)"]) {
+        background-color: var(--roxo) !important;
+        color: white !important;
+        border-color: var(--roxo) !important;
+    }
+    
+    /* Alertas */
+    .alert {
+        border-radius: 8px;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    /* Labels */
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Badges */
+    .badge {
+        font-weight: 500;
+        padding: 0.5em 0.8em;
+    }
+    
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .d-flex {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .flex-fill {
+            flex: 1 0 100%;
+        }
+    }
+</style>
 {% endblock %}
