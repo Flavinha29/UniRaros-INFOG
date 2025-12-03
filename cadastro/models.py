@@ -30,7 +30,7 @@ class Profile(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     tipo_usuario = models.PositiveSmallIntegerField(choices=TIPOS_USUARIO, default=2)
-    image = models.ImageField(upload_to='profiles/', default='profiles/default.png')
+    image = models.ImageField(upload_to='profiles/', default='profiles/default.png', blank=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.get_tipo_usuario_display()}"

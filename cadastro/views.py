@@ -178,9 +178,36 @@ def editar_perfil(request):
 def alterar_foto(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
 
-    if request.method == "POST" and request.FILES.get("image"):
-        profile.image = request.FILES["image"]
-        profile.save()
-        return redirect("cadastro:perfil")
+    if request.method == "POST":
+        # Verifica se foi enviado um arquivo
+        if not request.FILES.get("image"):
+            messages.error(request, "Por favor, selecione uma imagem.")
+            return redirect("cadastro:alterar_foto")
+        
+        image_file = request.FILES["image"]
+        
+        # Validação do tipo de arquivo
+        valid_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+        if image_file.content_type not in valid_types:
+            messages.error(request, "Formato de arquivo inválido. Use JPG, PNG, GIF ou WEBP.")
+            return redirect("cadastro:alterar_foto")
+        
+        # Validação do tamanho (5MB máximo)
+        max_size = 5 * 1024 * 1024  # 5MB
+        if image_file.size > max_size:
+            messages.error(request, "A imagem é muito grande. Tamanho máximo: 5MB.")
+            return redirect("cadastro:alterar_foto")
+        
+        try:
+            # Salva a imagem
+            profile.image = image_file
+            profile.save()
+            
+            messages.success(request, "Foto atualizada com sucesso!")
+            return redirect("cadastro:perfil")
+            
+        except Exception as e:
+            messages.error(request, f"Erro ao salvar a imagem: {str(e)}")
+            return redirect("cadastro:alterar_foto")
 
     return render(request, "cadastro/alterar_foto.html", {"profile": profile})

@@ -1,22 +1,159 @@
 {% extends 'base.html' %}
 
+{% block title %}Editar Perfil - UniRaros{% endblock %}
+
 {% block content %}
-<div class="container mt-4" style="max-width: 600px;">
-    <h3 class="mb-3">Editar Perfil</h3>
+<style>
+    .edit-profile-container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .edit-profile-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(91, 44, 111, 0.1);
+        padding: 2.5rem;
+        border-top: 4px solid #5B2C6F;
+    }
+    
+    .form-label-custom {
+        font-weight: 600;
+        color: #5B2C6F;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control-custom {
+        border: 2px solid #E0E0E0;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control-custom:focus {
+        border-color: #5B2C6F;
+        box-shadow: 0 0 0 0.25rem rgba(91, 44, 111, 0.25);
+    }
+    
+    .btn-save {
+        background: linear-gradient(135deg, #5B2C6F 0%, #8E44AD 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(91, 44, 111, 0.2);
+    }
+    
+    .back-link {
+        color: #5B2C6F;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .back-link:hover {
+        color: #8E44AD;
+        text-decoration: underline;
+    }
+    
+    .field-group {
+        margin-bottom: 1.5rem;
+    }
+</style>
 
-    <form method="POST">
-        {% csrf_token %}
-
-        <label class="form-label">Nome</label>
-        <input type="text" name="first_name" value="{{ user.first_name }}" class="form-control">
-
-        <label class="form-label mt-3">Sobrenome</label>
-        <input type="text" name="last_name" value="{{ user.last_name }}" class="form-control">
-
-        <label class="form-label mt-3">E-mail</label>
-        <input type="email" name="email" value="{{ user.email }}" class="form-control">
-
-        <button class="btn w-100 mt-4" style="background:#5B2C6F; color:white;">Salvar</button>
-    </form>
+<div class="edit-profile-container">
+    <a href="{% url 'cadastro:perfil' %}" class="back-link">
+        <i class="bi bi-arrow-left"></i> Voltar para o perfil
+    </a>
+    
+    <div class="edit-profile-card">
+        <h2 class="h3 mb-4" style="color: #5B2C6F;">
+            <i class="bi bi-pencil-square me-2"></i>Editar Perfil
+        </h2>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field-group">
+                        <label class="form-label-custom">Nome</label>
+                        <input type="text" 
+                               name="first_name" 
+                               value="{{ user.first_name }}" 
+                               class="form-control form-control-custom"
+                               placeholder="Seu primeiro nome">
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="field-group">
+                        <label class="form-label-custom">Sobrenome</label>
+                        <input type="text" 
+                               name="last_name" 
+                               value="{{ user.last_name }}" 
+                               class="form-control form-control-custom"
+                               placeholder="Seu sobrenome">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="field-group">
+                <label class="form-label-custom">E-mail</label>
+                <input type="email" 
+                       name="email" 
+                       value="{{ user.email }}" 
+                       class="form-control form-control-custom"
+                       placeholder="seu@email.com">
+                <small class="text-muted">Este será usado para login e notificações.</small>
+            </div>
+            
+            {% if user.phone %}
+            <div class="field-group">
+                <label class="form-label-custom">Telefone</label>
+                <input type="text" 
+                       name="phone" 
+                       value="{{ user.phone }}" 
+                       class="form-control form-control-custom"
+                       placeholder="(11) 99999-9999">
+            </div>
+            {% endif %}
+            
+            {% if user.birth_date %}
+            <div class="field-group">
+                <label class="form-label-custom">Data de Nascimento</label>
+                <input type="date" 
+                       name="birth_date" 
+                       value="{{ user.birth_date|date:'Y-m-d' }}" 
+                       class="form-control form-control-custom">
+            </div>
+            {% endif %}
+            
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                <a href="{% url 'cadastro:perfil' %}" class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-save">
+                    <i class="bi bi-check-circle"></i> Salvar Alterações
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="alert alert-info mt-4">
+        <i class="bi bi-info-circle me-2"></i>
+        <strong>Importante:</strong> Para alterar sua senha, utilize a opção "Alterar Senha" na página do perfil.
+    </div>
 </div>
 {% endblock %}

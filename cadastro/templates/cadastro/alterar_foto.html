@@ -1,16 +1,343 @@
 {% extends 'base.html' %}
 
+{% block title %}Alterar Foto - UniRaros{% endblock %}
+
 {% block content %}
-<div class="container mt-4" style="max-width: 600px;">
-    <h3 class="mb-3">Alterar Foto</h3>
+<style>
+    .photo-container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .photo-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(91, 44, 111, 0.1);
+        padding: 2.5rem;
+        border-top: 4px solid #5B2C6F;
+    }
+    
+    .current-photo {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        margin: 0 auto 2rem;
+        display: block;
+    }
+    
+    .file-upload-area {
+        border: 2px dashed #5B2C6F;
+        border-radius: 12px;
+        padding: 3rem 2rem;
+        text-align: center;
+        background: rgba(91, 44, 111, 0.05);
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    
+    .file-upload-area:hover {
+        background: rgba(91, 44, 111, 0.1);
+        border-color: #8E44AD;
+    }
+    
+    .file-upload-area i {
+        font-size: 3rem;
+        color: #5B2C6F;
+        margin-bottom: 1rem;
+    }
+    
+    .file-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .preview-container {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .preview-image {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        margin-top: 1rem;
+        display: none;
+        border: 3px solid #5B2C6F;
+    }
+    
+    .btn-upload {
+        background: linear-gradient(135deg, #5B2C6F 0%, #8E44AD 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+    
+    .btn-upload:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(91, 44, 111, 0.2);
+    }
+    
+    .btn-upload:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .back-link {
+        color: #5B2C6F;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .back-link:hover {
+        color: #8E44AD;
+        text-decoration: underline;
+    }
+    
+    .requirements {
+        background: #F8F9FA;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .requirements ul {
+        margin-bottom: 0;
+        padding-left: 1.5rem;
+    }
+</style>
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <label class="form-label">Selecione a nova foto</label>
-        <input type="file" name="image" class="form-control">
-
-        <button class="btn w-100 mt-4" style="background:#5B2C6F; color:white;">Salvar Foto</button>
-    </form>
+<div class="photo-container">
+    <a href="{% url 'cadastro:perfil' %}" class="back-link">
+        <i class="bi bi-arrow-left"></i> Voltar para o perfil
+    </a>
+    
+    <div class="photo-card">
+        <h2 class="h3 mb-4 text-center" style="color: #5B2C6F;">
+            <i class="bi bi-camera me-2"></i>Alterar Foto do Perfil
+        </h2>
+        
+        <!-- Mensagens do sistema -->
+        {% if messages %}
+            <div class="messages mb-4">
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                        <i class="bi {% if message.tags == 'success' %}bi-check-circle{% elif message.tags == 'error' %}bi-exclamation-triangle{% else %}bi-info-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <!-- Foto atual -->
+        <div class="text-center mb-4">
+            <h4 class="h5 mb-3">Sua foto atual</h4>
+            {% if user.profile and user.profile.image and user.profile.image.url %}
+                <img src="{{ user.profile.image.url }}" 
+                     alt="Foto atual" 
+                     class="current-photo"
+                     onerror="this.src='/media/profiles/default.png'">
+            {% else %}
+                <img src="/media/profiles/default.png" 
+                     alt="Foto padrão" 
+                     class="current-photo">
+            {% endif %}
+        </div>
+        
+        <!-- Formulário de upload -->
+        <form method="POST" enctype="multipart/form-data" id="photoForm">
+            {% csrf_token %}
+            
+            <div class="file-upload-area" onclick="document.getElementById('imageInput').click()">
+                <i class="bi bi-cloud-upload"></i>
+                <h5 class="mb-2">Clique para selecionar uma nova foto</h5>
+                <p class="text-muted mb-0">Ou arraste e solte uma imagem aqui</p>
+                <input type="file" 
+                       name="image" 
+                       id="imageInput" 
+                       class="file-input" 
+                       accept="image/*"
+                       required>
+            </div>
+            
+            <!-- Preview da nova imagem -->
+            <div class="preview-container">
+                <h5 class="h6 mb-2">Prévia da nova foto:</h5>
+                <img id="previewImage" class="preview-image" alt="Prévia da imagem">
+                <p id="fileName" class="text-muted mt-2"></p>
+                <p id="fileSize" class="text-muted small"></p>
+            </div>
+            
+            <div class="requirements">
+                <p class="mb-2"><strong>Requisitos da imagem:</strong></p>
+                <ul>
+                    <li>Formatos aceitos: JPG, PNG, GIF, WEBP</li>
+                    <li>Tamanho máximo: 5MB</li>
+                    <li>Dimensões recomendadas: 400x400 pixels</li>
+                    <li>Imagem quadrada funciona melhor</li>
+                </ul>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                <a href="{% url 'cadastro:perfil' %}" class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-upload" id="submitBtn">
+                    <i class="bi bi-upload"></i> Salvar Nova Foto
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('imageInput');
+        const preview = document.getElementById('previewImage');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const submitBtn = document.getElementById('submitBtn');
+        const photoForm = document.getElementById('photoForm');
+        const fileUploadArea = document.querySelector('.file-upload-area');
+        
+        // Preview da imagem
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            
+            if (file) {
+                // Validação do tipo de arquivo
+                const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Formato de arquivo inválido. Use JPG, PNG, GIF ou WEBP.');
+                    imageInput.value = '';
+                    preview.style.display = 'none';
+                    fileName.textContent = '';
+                    fileSize.textContent = '';
+                    return;
+                }
+                
+                // Validação do tamanho do arquivo (5MB)
+                const maxSize = 5 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    alert('O arquivo é muito grande. Por favor, selecione uma imagem menor que 5MB.');
+                    imageInput.value = '';
+                    preview.style.display = 'none';
+                    fileName.textContent = '';
+                    fileSize.textContent = '';
+                    return;
+                }
+                
+                // Cria preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    fileName.textContent = `Arquivo: ${file.name}`;
+                    fileSize.textContent = `Tamanho: ${(file.size / 1024).toFixed(2)} KB`;
+                    
+                    // Animação
+                    preview.style.opacity = '0';
+                    preview.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        preview.style.transition = 'all 0.3s ease';
+                        preview.style.opacity = '1';
+                        preview.style.transform = 'scale(1)';
+                    }, 10);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Validação do formulário antes de enviar
+        photoForm.addEventListener('submit', function(e) {
+            if (!imageInput.files || imageInput.files.length === 0) {
+                e.preventDefault();
+                alert('Por favor, selecione uma imagem para upload.');
+                return;
+            }
+            
+            const file = imageInput.files[0];
+            const maxSize = 5 * 1024 * 1024;
+            
+            if (file.size > maxSize) {
+                e.preventDefault();
+                alert('O arquivo é muito grande. Por favor, selecione uma imagem menor que 5MB.');
+                return;
+            }
+            
+            // Mostra loading no botão
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Enviando...';
+        });
+        
+        // Arrastar e soltar
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            fileUploadArea.style.backgroundColor = 'rgba(91, 44, 111, 0.15)';
+            fileUploadArea.style.borderColor = '#8E44AD';
+            fileUploadArea.style.borderStyle = 'solid';
+        }
+        
+        function unhighlight() {
+            fileUploadArea.style.backgroundColor = 'rgba(91, 44, 111, 0.05)';
+            fileUploadArea.style.borderColor = '#5B2C6F';
+            fileUploadArea.style.borderStyle = 'dashed';
+        }
+        
+        fileUploadArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                // Seta os arquivos no input
+                imageInput.files = files;
+                // Dispara o evento change para processar a imagem
+                const event = new Event('change', { bubbles: true });
+                imageInput.dispatchEvent(event);
+            }
+        }
+    });
+</script>
 {% endblock %}

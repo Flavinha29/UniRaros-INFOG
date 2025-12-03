@@ -1,86 +1,398 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Meu Perfil{% endblock %}
+{% block title %}Meu Perfil - UniRaros{% endblock %}
 
 {% block content %}
 
 <style>
-    .btn-roxo {
-        background-color: #5B2C6F;
-        color: #FFFFFF;
-        border: none;
+    :root {
+        --roxo-principal: #5B2C6F;
+        --roxo-claro: #8E44AD;
+        --roxo-suave: #F3E5F5;
+        --verde: #28A745;
+        --verde-claro: #D4EDDA;
+        --cinza-claro: #F8F9FA;
+        --cinza-borda: #E0E0E0;
+        --sombra: 0 4px 12px rgba(91, 44, 111, 0.1);
     }
-    .btn-roxo:hover {
-        background-color: #4a255d;
+    
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
     }
-
-    .btn-verde {
-        background-color: #28A745;
-        color: #FFFFFF;
-        border: none;
+    
+    .profile-header {
+        background: linear-gradient(135deg, var(--roxo-principal) 0%, var(--roxo-claro) 100%);
+        color: white;
+        border-radius: 15px 15px 0 0;
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
     }
-    .btn-verde:hover {
-        background-color: #218838;
+    
+    .profile-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+        background-size: cover;
     }
-    .btn-roxo-borda {
-    background-color: transparent;
-    color: #5B2C6F;
-    border: 2px solid #5B2C6F;
+    
+    .profile-avatar {
+        width: 140px;
+        height: 140px;
+        border: 5px solid white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
     }
-
-    .btn-roxo-borda:hover {
-    background-color: #f5f5f5;
+    
+    .profile-avatar:hover {
+        transform: scale(1.05);
     }
-
+    
+    .profile-info-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--sombra);
+        padding: 2rem;
+        margin-top: -40px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--cinza-borda);
+    }
+    
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    
+    .info-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--roxo-suave);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        color: var(--roxo-principal);
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #555;
+        min-width: 150px;
+    }
+    
+    .info-value {
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .action-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        gap: 8px;
+    }
+    
+    .btn-primary-custom {
+        background: var(--roxo-principal);
+        color: white;
+        border: 2px solid var(--roxo-principal);
+    }
+    
+    .btn-primary-custom:hover {
+        background: var(--roxo-claro);
+        border-color: var(--roxo-claro);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(91, 44, 111, 0.2);
+    }
+    
+    .btn-outline-custom {
+        background: white;
+        color: var(--roxo-principal);
+        border: 2px solid var(--roxo-principal);
+    }
+    
+    .btn-outline-custom:hover {
+        background: var(--roxo-suave);
+        color: var(--roxo-principal);
+        transform: translateY(-2px);
+    }
+    
+    .btn-success-custom {
+        background: var(--verde);
+        color: white;
+        border: 2px solid var(--verde);
+    }
+    
+    .btn-success-custom:hover {
+        background: #218838;
+        border-color: #218838;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(40, 167, 69, 0.2);
+    }
+    
+    .user-type-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-left: 1rem;
+    }
+    
+    .badge-patient {
+        background: var(--verde-claro);
+        color: #155724;
+    }
+    
+    .badge-staff {
+        background: #E3F2FD;
+        color: #0D47A1;
+    }
+    
+    .badge-admin {
+        background: #FCE4EC;
+        color: #880E4F;
+    }
+    
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .profile-header {
+            padding: 1.5rem;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .info-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .info-label {
+            min-width: auto;
+        }
+        
+        .action-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 
-<div class="container mt-5" style="max-width: 700px;">
-    <h2 class="text-center mb-4">Meu Perfil</h2>
-
-    <div class="card shadow p-4">
-
-        <div class="d-flex align-items-center mb-4">
-
-            {% if user.profile and user.profile.image %}
-                <img src="{{ user.profile.image.url }}"
-                     alt="Foto do usuário"
-                     class="rounded-circle me-3"
-                     style="width:100px; height:100px; object-fit:cover;">
-            {% else %}
-                <img src="/media/profiles/default.png"
-                     alt="Foto padrão"
-                     class="rounded-circle me-3"
-                     style="width:100px; height:100px; object-fit:cover;">
+<div class="profile-container">
+    <!-- Cabeçalho do perfil -->
+    <div class="profile-header text-center">
+        <div class="d-flex flex-column align-items-center">
+            <div class="mb-3 position-relative">
+                {% if user.profile and user.profile.image %}
+                    <img src="{{ user.profile.image.url }}" 
+                         alt="Foto do perfil" 
+                         class="profile-avatar rounded-circle">
+                {% else %}
+                    <img src="/media/profiles/default.png" 
+                         alt="Foto padrão" 
+                         class="profile-avatar rounded-circle">
+                {% endif %}
+                <div class="mt-3">
+                    <a href="{% url 'cadastro:alterar_foto' %}" class="btn btn-sm btn-light">
+                        <i class="bi bi-camera"></i> Alterar foto
+                    </a>
+                </div>
+            </div>
+            
+            <h1 class="h2 mb-1">
+                {{ user.get_full_name|default:user.username }}
+                <span class="user-type-badge 
+                    {% if user.user_type == 'patient' %}badge-patient
+                    {% elif user.user_type == 'staff' %}badge-staff
+                    {% else %}badge-admin{% endif %}">
+                    {% if user.user_type == 'patient' %}Paciente
+                    {% elif user.user_type == 'staff' %}Equipe
+                    {% else %}Administrador{% endif %}
+                </span>
+            </h1>
+            <p class="mb-0 opacity-75">
+                <i class="bi bi-envelope"></i> {{ user.email }}
+            </p>
+            {% if user.status %}
+                <span class="badge {% if user.status == 'approved' %}bg-success
+                                   {% elif user.status == 'pending' %}bg-warning text-dark
+                                   {% else %}bg-danger{% endif %} mt-2">
+                    Status: {{ user.get_status_display }}
+                </span>
             {% endif %}
+        </div>
+    </div>
 
-            <div>
-                <h4>{{ user.get_full_name|default:user.username }}</h4>
-                <p class="text-muted">{{ user.email }}</p>
+    <!-- Informações do perfil -->
+    <div class="profile-info-card">
+        <h3 class="h4 mb-4" style="color: var(--roxo-principal);">
+            <i class="bi bi-person-badge"></i> Informações Pessoais
+        </h3>
+        
+        <div class="info-item">
+            <div class="info-icon">
+                <i class="bi bi-person"></i>
+            </div>
+            <div class="d-flex flex-column flex-md-row w-100 align-items-md-center">
+                <span class="info-label">Nome de usuário:</span>
+                <span class="info-value">{{ user.username }}</span>
             </div>
         </div>
-
-        <hr>
-
-        <div class="mb-3">
-            <p><strong>Nome de usuário:</strong> {{ user.username }}</p>
-            <p><strong>Nome completo:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        
+        <div class="info-item">
+            <div class="info-icon">
+                <i class="bi bi-card-heading"></i>
+            </div>
+            <div class="d-flex flex-column flex-md-row w-100 align-items-md-center">
+                <span class="info-label">Nome completo:</span>
+                <span class="info-value">
+                    {% if user.first_name or user.last_name %}
+                        {{ user.first_name }} {{ user.last_name }}
+                    {% else %}
+                        <span class="text-muted">Não informado</span>
+                    {% endif %}
+                </span>
+            </div>
         </div>
+        
+        <div class="info-item">
+            <div class="info-icon">
+                <i class="bi bi-telephone"></i>
+            </div>
+            <div class="d-flex flex-column flex-md-row w-100 align-items-md-center">
+                <span class="info-label">Telefone:</span>
+                <span class="info-value">
+                    {% if user.phone %}
+                        {{ user.phone }}
+                    {% else %}
+                        <span class="text-muted">Não informado</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <div class="info-item">
+            <div class="info-icon">
+                <i class="bi bi-calendar"></i>
+            </div>
+            <div class="d-flex flex-column flex-md-row w-100 align-items-md-center">
+                <span class="info-label">Data de nascimento:</span>
+                <span class="info-value">
+                    {% if user.birth_date %}
+                        {{ user.birth_date|date:"d/m/Y" }}
+                    {% else %}
+                        <span class="text-muted">Não informada</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <div class="info-item">
+            <div class="info-icon">
+                <i class="bi bi-calendar-plus"></i>
+            </div>
+            <div class="d-flex flex-column flex-md-row w-100 align-items-md-center">
+                <span class="info-label">Membro desde:</span>
+                <span class="info-value">{{ user.date_joined|date:"d/m/Y" }}</span>
+            </div>
+        </div>
+        
+        {% if user.user_type == 'patient' and user.paciente_profile %}
+        <div class="info-item">
+            <div class="info-icon">
+                <i class="bi bi-heart-pulse"></i>
+            </div>
+            <div class="d-flex flex-column flex-md-row w-100 align-items-md-center">
+                <span class="info-label">Doença:</span>
+                <span class="info-value">
+                    {% if user.paciente_profile.doenca %}
+                        {{ user.paciente_profile.doenca }}
+                    {% else %}
+                        <span class="text-muted">Não informada</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        {% endif %}
 
-        <hr>
-
-        <div class="d-grid gap-2">
-            <a href="{% url 'password_change' %}" class="btn btn-roxo">Alterar Senha</a>
-
-            <a href="{% url 'cadastro:editar_perfil' %}" 
-            class="btn btn-roxo-borda">
-            Editar Perfil
+        <!-- Ações -->
+        <div class="action-grid">
+            <a href="{% url 'password_change' %}" class="action-btn btn-primary-custom">
+                <i class="bi bi-key"></i> Alterar Senha
             </a>
-
-            <a href="{% url 'cadastro:alterar_foto' %}" class="btn btn-verde text-white">
-                Alterar Foto
+            
+            <a href="{% url 'cadastro:editar_perfil' %}" class="action-btn btn-outline-custom">
+                <i class="bi bi-pencil-square"></i> Editar Perfil
+            </a>
+            
+            {% if user.user_type == 'patient' %}
+            <a href="#" class="action-btn" style="background: #E3F2FD; color: #0D47A1; border: 2px solid #BBDEFB;">
+                <i class="bi bi-clipboard-pulse"></i> Meus Relatos
+            </a>
+            {% endif %}
+            
+            <a href="{% url 'cadastro:alterar_foto' %}" class="action-btn btn-success-custom">
+                <i class="bi bi-camera"></i> Alterar Foto
             </a>
         </div>
-
+        
+        <!-- Estatísticas (opcional) -->
+        {% if user.user_type == 'patient' %}
+        <div class="mt-4 pt-4 border-top">
+            <h4 class="h5 mb-3" style="color: var(--roxo-principal);">
+                <i class="bi bi-bar-chart"></i> Minhas Estatísticas
+            </h4>
+            <div class="row text-center">
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 rounded" style="background: var(--roxo-suave);">
+                        <h5 class="mb-0">0</h5>
+                        <small class="text-muted">Relatos publicados</small>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 rounded" style="background: var(--roxo-suave);">
+                        <h5 class="mb-0">0</h5>
+                        <small class="text-muted">Eventos participados</small>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 rounded" style="background: var(--roxo-suave);">
+                        <h5 class="mb-0">{{ user.date_joined|timesince }}</h5>
+                        <small class="text-muted">No sistema</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 
