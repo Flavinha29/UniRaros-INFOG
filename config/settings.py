@@ -66,7 +66,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'uniraros_infog',
+        'NAME': 'uniraros_infog1',
         'USER': 'postgres',
         'PASSWORD': '123456',
         'HOST': 'localhost',
@@ -78,8 +78,8 @@ DATABASES = {
 AUTH_USER_MODEL = 'accounts.CustomUser'  # ✅ CORRIGIDO: CustomUser
 
 AUTHENTICATION_BACKENDS = [
+    'accounts.backends.StatusBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'accounts.backends.StatusBackend',  # ✅ Backend customizado
 ]
 
 # ✅ URLs DE LOGIN
