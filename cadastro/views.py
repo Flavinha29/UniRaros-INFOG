@@ -100,17 +100,23 @@ def login_view(request):
         username_or_email = form.cleaned_data['username_or_email']
         senha = form.cleaned_data['senha']
 
-        if '@' in username_or_email:
-            try:
-                username = User.objects.get(email=username_or_email).username
-            except User.DoesNotExist:
-                username = None
-        else:
-            username = username_or_email
+        # ✅ CORREÇÃO: Usa authenticate com o backend personalizado
+        user = authenticate(request, username=username_or_email, password=senha)
 
-        user = authenticate(request, username=username, password=senha)
-
-        if user:
+        if user is not None:
+            # ✅ VERIFICAÇÃO EXTRA DE APROVAÇÃO (para garantir)
+            if user.user_type == 'patient' and user.status != 'approved':
+                messages.error(
+                    request,
+                    "Seu cadastro está pendente de aprovação. "
+                    "Você receberá um e-mail quando for aprovado."
+                )
+                return render(request, 'cadastro/login.html', {
+                    'form': form,
+                    'error': "Cadastro pendente de aprovação."
+                })
+            
+            # Se passou todas as verificações, faz login
             login(request, user)
 
             if user.user_type == "patient":
@@ -119,8 +125,16 @@ def login_view(request):
                 return redirect('cadastro:dashboard_usuario')
             else:
                 return redirect('cadastro:dashboard_admin')
-
-        error = "Usuário ou senha inválidos."
+        else:
+            # ✅ Tenta verificar se o problema é aprovação
+            try:
+                user = User.objects.get(email=username_or_email) if '@' in username_or_email else User.objects.get(username=username_or_email)
+                if user.user_type == 'patient' and user.status != 'approved':
+                    error = "Seu cadastro está pendente de aprovação. Aguarde o e-mail de confirmação."
+                else:
+                    error = "Usuário ou senha inválidos."
+            except User.DoesNotExist:
+                error = "Usuário ou senha inválidos."
 
     return render(request, 'cadastro/login.html', {
         'form': form,
